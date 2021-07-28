@@ -1,0 +1,27 @@
+﻿<Window x:Class="Sklad.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sklad"
+        mc:Ignorable="d"
+        Title="Склад" Height="450" Width="800">
+    <Grid>
+        <Label Content="База с данни на резервни части за ПМС" HorizontalAlignment="Left" Margin="193,26,0,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold"/>
+        <TextBox x:Name="TxtById" HorizontalAlignment="Left" Height="23" Margin="57,112,0,0" TextWrapping="Wrap" Text="Търсене по id" VerticalAlignment="Top" Width="180" GotFocus="TxtById_GotFocus"/>
+        <TextBox x:Name="TxtByName" HorizontalAlignment="Left" Height="23" Margin="454,112,0,0" TextWrapping="Wrap" Text="Търсене по име" VerticalAlignment="Top" Width="180" GotFocus="TxtByName_GotFocus"/>
+        <TextBox x:Name="TxtByLocation" HorizontalAlignment="Left" Height="23" Margin="454,221,0,0" TextWrapping="Wrap" Text="Търсене по местоположение" VerticalAlignment="Top" Width="180" GotFocus="TxtByLocation_GotFocus"/>
+        <TextBox x:Name="TxtByDesc" HorizontalAlignment="Left" Height="23" Margin="57,224,0,0" TextWrapping="Wrap" Text="Търсене по описание" VerticalAlignment="Top" Width="180" GotFocus="TxtByDesc_GotFocus"/>
+        <Button x:Name="BtnId" Content="Търси" HorizontalAlignment="Left" Margin="279,111,0,0" VerticalAlignment="Top" Width="75" Click="BtnId_Click"/>
+        <Button x:Name="BtnDesc" Content="Търси" HorizontalAlignment="Left" Margin="279,224,0,0" VerticalAlignment="Top" Width="75" Click="BtnDesc_Click"/>
+        <Button x:Name="BtnName" Content="Търси" HorizontalAlignment="Left" Margin="675,112,0,0" VerticalAlignment="Top" Width="75" Click="BtnName_Click"/>
+        <Button x:Name="BtnLocation" Content="Търси" HorizontalAlignment="Left" Margin="675,224,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="BtnLocation_Click"/>
+        <Button x:Name="BtnAdd" Content="Добави ново" HorizontalAlignment="Left" Margin="454,354,0,0" VerticalAlignment="Top" Width="113" Height="31" Click="BtnAdd_Click"/>
+        <Button x:Name="BtnShowAll" Content="Всички части" HorizontalAlignment="Left" Margin="279,354,0,0" VerticalAlignment="Top" Width="97" Height="31" Click="BtnShowAll_Click"/>
+        <Label Content="По id:" HorizontalAlignment="Left" Margin="57,86,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.331,0.391"/>
+        <Label Content="По описание:" HorizontalAlignment="Left" Margin="57,198,0,0" VerticalAlignment="Top"/>
+        <Label Content="По име:" HorizontalAlignment="Left" Margin="454,86,0,0" VerticalAlignment="Top"/>
+        <Label Content="По местополжение:" HorizontalAlignment="Left" Margin="454,195,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,46 @@
+﻿<Window x:Class="Sklad.Add"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sklad"
+        mc:Ignorable="d"
+        Title="Добави" Height="860" Width="520">
+    <Grid>
+        <GroupBox Header="Част" HorizontalAlignment="Left" Height="582" Margin="10,0,0,0" VerticalAlignment="Top" Width="482"/>
+
+        <GroupBox Header="Местоположение" HorizontalAlignment="Left" Height="222" Margin="14,587,0,0" VerticalAlignment="Top" Width="478"/>
+        <TextBox x:Name="TxtId" HorizontalAlignment="Left" Height="37" Margin="323,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="TxtName" HorizontalAlignment="Left" Height="37" Margin="323,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="TxtQuantity" HorizontalAlignment="Left" Height="37" Margin="323,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="TxtDesc" HorizontalAlignment="Left" Height="119" Margin="248,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230"/>
+        <Label Content="Въведи ID:" HorizontalAlignment="Left" Margin="32,27,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Въведи количество:" HorizontalAlignment="Left" Margin="32,201,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Въведи име:" HorizontalAlignment="Left" Margin="32,112,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Въведи описание:" HorizontalAlignment="Left" Margin="32,282,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Въведи местоположение:" HorizontalAlignment="Left" Margin="32,420,0,0" VerticalAlignment="Top" FontSize="20" RenderTransformOrigin="0.523,-2.404"/>
+        <Label Content="Въведи ново местоположение:" HorizontalAlignment="Left" Margin="32,608,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <TextBox x:Name="TxtAddSubLocation" HorizontalAlignment="Left" Height="37" Margin="301,696,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <Button x:Name="BtnAddLoc" Content="Добави местоположение" HorizontalAlignment="Left" Margin="323,752,0,0" VerticalAlignment="Top" Width="155" Height="35" Click="BtnAddLoc_Click"/>
+        <Button x:Name="BtnAddPart" Content="Добави част" HorizontalAlignment="Left" Margin="323,530,0,0" VerticalAlignment="Top" Width="155" Height="35" Click="BtnAddPart_Click"/>
+        <ComboBox x:Name="CmbBoxLoc" HorizontalAlignment="Left" Margin="35,480,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="CmbBoxSubLoc" HorizontalAlignment="Left" Margin="187,480,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=CmbBoxLoc}" Value="0">
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+        <TextBox x:Name="TxtAddLocation" HorizontalAlignment="Left" Height="37" Margin="65,696,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <Label Content="Стая:" HorizontalAlignment="Left" Margin="65,665,0,0" VerticalAlignment="Top"/>
+        <Label Content="Рафт:" HorizontalAlignment="Left" Margin="299,665,0,0" VerticalAlignment="Top"/>
+        <Label Content="Стая:" HorizontalAlignment="Left" Margin="35,454,0,0" VerticalAlignment="Top"/>
+        <Label Content="Рафт:" HorizontalAlignment="Left" Margin="187,454,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
