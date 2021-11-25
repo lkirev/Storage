@@ -13,5 +13,6 @@ namespace Sklad
         {
             MessageBox.Show("Въведи правилно " + var, "Грешка");
         }
+        public MyInvalidInputException() { }
     }
 }

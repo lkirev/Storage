@@ -109,184 +109,215 @@ namespace Sklad
         }*/
         private void BtnAddPart_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("opa");
-
-            String loc = CmbBoxLoc.SelectedItem.ToString();
-            String sub_loc = "0";
-            String query = null;
-            String id = TxtId.Text;
-            String name = TxtName.Text;
-            String quantity = TxtQuantity.Text;
-            bool isThrown = false;
-
-            Console.WriteLine("before while");
-            /*while (((int.Parse(id) != 0)) && (name.Equals("")) && ((uint.Parse(quantity) <= 0)))
+            if (Login.getRole() == 3)
             {
-                Console.WriteLine("In while");
-                try { id = TxtId.Text; } catch { throw new MyInvalidInputException("ID"); }
-                try { name = TxtName.Text; } catch { throw new MyInvalidInputException("име"); }
-                try { quantity = TxtQuantity.Text; } catch { throw new MyInvalidInputException("количество"); }
-            }*/
-
-            try
+                MessageBox.Show("Unauthorized!", "Error!");
+                this.Close();
+            }
+            else
             {
-                if (String.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^[0-9]+$"))
+                Console.WriteLine("opa");
+
+                String loc = CmbBoxLoc.SelectedItem.ToString();
+                String sub_loc = "0";
+                String query = null;
+                String id = TxtId.Text;
+                String name = TxtName.Text;
+                String quantity = TxtQuantity.Text;
+                bool isThrown = false;
+
+                Console.WriteLine("before while");
+                /*while (((int.Parse(id) != 0)) && (name.Equals("")) && ((uint.Parse(quantity) <= 0)))
                 {
-                    throw new MyInvalidInputException("id.");
-                    //isThrown = true;
-                    //this.Close();
-                }
-                else
+                    Console.WriteLine("In while");
+                    try { id = TxtId.Text; } catch { throw new MyInvalidInputException("ID"); }
+                    try { name = TxtName.Text; } catch { throw new MyInvalidInputException("име"); }
+                    try { quantity = TxtQuantity.Text; } catch { throw new MyInvalidInputException("количество"); }
+                }*/
+
+                try
                 {
-                    if (String.IsNullOrEmpty(name))
+                    if (String.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^[0-9]+$"))
                     {
-                        throw new MyInvalidInputException("име.");
+                        throw new MyInvalidInputException("id.");
                         //isThrown = true;
                         //this.Close();
                     }
                     else
                     {
-                        if (String.IsNullOrEmpty(quantity) || !Regex.IsMatch(quantity, "^[0-9]+$") || int.Parse(quantity) < 0)
+                        if (String.IsNullOrEmpty(name))
                         {
-                            throw new MyInvalidInputException("количество.");
+                            throw new MyInvalidInputException("име.");
                             //isThrown = true;
                             //this.Close();
                         }
+                        else
+                        {
+                            if (String.IsNullOrEmpty(quantity) || !Regex.IsMatch(quantity, "^[0-9]+$") || int.Parse(quantity) < 0)
+                            {
+                                throw new MyInvalidInputException("количество.");
+                                //isThrown = true;
+                                //this.Close();
+                            }
+                        }
                     }
-                }
 
 
 
-                if (loc.Equals("T2"))
-                {
-                    try
+                    if (loc.Equals("T2"))
                     {
-                        sub_loc = CmbBoxSubLoc.SelectedItem.ToString();
-                    }
-                    catch
-                    {
-                        sub_loc = "0";
-                    }
-                    query = Part.AddPartIDT2(id, name, quantity, TxtDesc.Text, loc, sub_loc);
+                        try
+                        {
+                            sub_loc = CmbBoxSubLoc.SelectedItem.ToString();
+                        }
+                        catch
+                        {
+                            sub_loc = "0";
+                        }
+                        query = Part.AddPartIDT2(id, name, quantity, TxtDesc.Text, loc, sub_loc);
 
-                }
-                else
-                {
-                    query = Part.AddPartID(id, name, quantity, TxtDesc.Text, loc);
-                }
-                MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
-
-                Database.DbConn.Open();
-                //try
-                {
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Успешно добавена част!", "Успех!");
-                }
-                //catch (MySql.Data.MySqlClient.MySqlException)
-                {
-                    //MessageBox.Show("Вече съществува част с това ID.", "Дупликат");
-                }
-                Database.DbConn.Close();
-            }
-            catch (MyInvalidInputException)
-            {
-                MessageBox.Show("Грешка в добавянето на част.", "Грешка");
-            }
-
-
-            /*while (id.Equals("0"))
-            {
-                Console.WriteLine("In while2");
-
-
-                try
-                {
-                    if (int.Parse(id) <= 0)
-                    {
-                        Console.WriteLine("in if id is: "+ id);
-                        //id = TxtId.Text;
                     }
                     else
                     {
-                        throw new MyInvalidInputException("ID");
-                        this.Close();
+                        query = Part.AddPartID(id, name, quantity, TxtDesc.Text, loc);
                     }
-                }
-                catch { Console.WriteLine("catched"); }
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
 
-            }*/
-
-            //if (id <= 0) { throw new MyInvalidInputException("ID"); }
-            //if(name.Equals("")) { throw new MyInvalidInputException("име"); }
-            //if(quantity <= 0) { throw new MyInvalidInputException("количество"); }
-            /*if (isThrown == false)
-            {
-                if (loc.Equals("T2"))
-                {
+                    List<Part> parts = Part.GetParts();
                     try
                     {
-                        sub_loc = CmbBoxSubLoc.SelectedItem.ToString();
+                        foreach (Part p in parts)
+                        {
+                            if (p.Id == int.Parse(id))
+                            {
+                                Console.WriteLine("id duplicate");
+                                throw new MyInvalidInputException("id.");
+                            }
+                        }
+
+                        Database.DbConn.Open();
+
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Успешно добавена част!", "Успех!");
+                    }
+                    catch (MyInvalidInputException)
+                    {
+                        MessageBox.Show("Вече съществува част с това ID.", "Дубликат");
                     }
                     catch
                     {
-                        sub_loc = "0";
+                        MessageBox.Show("Грешка при въвеждане.", "Грешка");
                     }
-                    query = Part.AddPartIDT2(id, name, quantity, TxtDesc.Text, loc, sub_loc);
+                    Database.DbConn.Close();
+                }
+                catch (MyInvalidInputException)
+                {
+                    MessageBox.Show("Грешка в добавянето на част.", "Грешка");
+                }
 
-                }
-                else
-                {
-                    query = Part.AddPartID(id, name, quantity, TxtDesc.Text, loc);
-                }
-                MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
 
-                Database.DbConn.Open();
-                try
+                /*while (id.Equals("0"))
                 {
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Succsesfully added part!", "Succsess!");
-                }
-                catch (MySql.Data.MySqlClient.MySqlException)
+                    Console.WriteLine("In while2");
+
+
+                    try
+                    {
+                        if (int.Parse(id) <= 0)
+                        {
+                            Console.WriteLine("in if id is: "+ id);
+                            //id = TxtId.Text;
+                        }
+                        else
+                        {
+                            throw new MyInvalidInputException("ID");
+                            this.Close();
+                        }
+                    }
+                    catch { Console.WriteLine("catched"); }
+
+                }*/
+
+                //if (id <= 0) { throw new MyInvalidInputException("ID"); }
+                //if(name.Equals("")) { throw new MyInvalidInputException("име"); }
+                //if(quantity <= 0) { throw new MyInvalidInputException("количество"); }
+                /*if (isThrown == false)
                 {
-                    MessageBox.Show("An item with that ID already exists!", "Duplicate");
+                    if (loc.Equals("T2"))
+                    {
+                        try
+                        {
+                            sub_loc = CmbBoxSubLoc.SelectedItem.ToString();
+                        }
+                        catch
+                        {
+                            sub_loc = "0";
+                        }
+                        query = Part.AddPartIDT2(id, name, quantity, TxtDesc.Text, loc, sub_loc);
+
+                    }
+                    else
+                    {
+                        query = Part.AddPartID(id, name, quantity, TxtDesc.Text, loc);
+                    }
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
+
+                    Database.DbConn.Open();
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Succsesfully added part!", "Succsess!");
+                    }
+                    catch (MySql.Data.MySqlClient.MySqlException)
+                    {
+                        MessageBox.Show("An item with that ID already exists!", "Duplicate");
+                    }
+                    Database.DbConn.Close();
                 }
-                Database.DbConn.Close();
+                */
             }
-            */
         }
 
         private void BtnAddLoc_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (Login.getRole() != 1)
             {
-                String loc = "";
-                String subLoc = "";
-
-                if (String.IsNullOrEmpty(TxtAddLocation.Text.ToUpper()))
-                {
-                    //MessageBox.Show("Error adding location");
-                    throw new MyInvalidInputException("локация.");
-                }
-                else
-                {
-                    loc = TxtAddLocation.Text.ToUpper();
-                    subLoc = TxtAddSubLocation.Text;
-                }
-
-                String query = Location.AddLocation(loc, subLoc);
-
-                MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
-
-                Database.DbConn.Open();
-                cmd.ExecuteNonQuery();
-                Database.DbConn.Close();
-
-                MessageBox.Show("Успешно добавено местоположение!", "Успех");
+                MessageBox.Show("Unauthorized!", "Error!");
+                this.Close();
             }
-            catch(MyInvalidInputException)
+            else
             {
-                MessageBox.Show("Грешка в добавянето на местоположение!", "Грешка");
-                //this.Close();
+                try
+                {
+                    String loc = "";
+                    String subLoc = "";
+
+                    if (String.IsNullOrEmpty(TxtAddLocation.Text.ToUpper()))
+                    {
+                        //MessageBox.Show("Error adding location");
+                        throw new MyInvalidInputException("локация.");
+                    }
+                    else
+                    {
+                        loc = TxtAddLocation.Text.ToUpper();
+                        subLoc = TxtAddSubLocation.Text;
+                    }
+
+                    String query = Location.AddLocation(loc, subLoc);
+
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
+
+                    Database.DbConn.Open();
+                    cmd.ExecuteNonQuery();
+                    Database.DbConn.Close();
+
+                    MessageBox.Show("Успешно добавено местоположение!", "Успех");
+                }
+                catch (MyInvalidInputException)
+                {
+                    MessageBox.Show("Грешка в добавянето на местоположение!", "Грешка");
+                    //this.Close();
+                }
             }
         }
 

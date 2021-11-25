@@ -35,96 +35,108 @@ namespace Sklad
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("REMOVING");
-            //uint i = 0;
-            //List<Part> selected = ListViewResult.SelectedItems.Cast<Part>().ToList();
-            Part selected = (Part)ListViewResult.SelectedItem;
-            Console.WriteLine("Selected " + selected.Part_name);
-            QuantityDialogBox inputDialog = new QuantityDialogBox();
-            if(inputDialog.ShowDialog() == true)
-            {
-                i = uint.Parse(inputDialog.Answer);
-            }
-            Console.WriteLine("za vzimane i: " + i);
-            //uint newQuant = 0;
-            oldQuant = selected.Quantity;
-            if((oldQuant - i) > 0)
-            {
-                newQuant = oldQuant - i;
-                Console.WriteLine("new quant is: " + newQuant);
-                //selected.Quantity = Convert.ToUInt32(newQuant);
-                selected.Quantity = newQuant;
-            }
-            else
-            {
-                MessageBox.Show("Недостатъчно количество.", "Грешка");
-            }
-
-            String query = Part.RemovePart(selected.Id, newQuant);
-
-            MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
-
-            Database.DbConn.Open();
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch
-            {
-                MessageBox.Show("Грешка в промяна на количеството.", "Грешка");
-            }
-
-            ListViewResult.Items.Refresh();
-            Database.DbConn.Close();
-            
-        }
+            if (Login.getRole() == 3){MessageBox.Show("Unauthorized!", "Error!");this.Close();}else{
+                Part selected = (Part)ListViewResult.SelectedItem;
+                try
+                {
+                    if(selected.GetType() == null){throw new NullReferenceException();}
+                    QuantityDialogBox inputDialog = new QuantityDialogBox();
+                    if (inputDialog.ShowDialog() == true)
+                    {
+                        i = uint.Parse(inputDialog.Answer);
+                    }
+                    oldQuant = selected.Quantity;
+                    if ((oldQuant - i) > 0)
+                    {
+                        newQuant = oldQuant - i;
+                        selected.Quantity = newQuant;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Недостатъчно количество.", "Грешка");
+                    }
+                    String query = Part.RemovePart(selected.Id, newQuant);
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
+                    Database.DbConn.Open();
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Грешка в промяна на количеството.", "Грешка");
+                    }
+                    ListViewResult.Items.Refresh();
+                    Database.DbConn.Close();
+                }
+                catch{MessageBox.Show("No item selected!", "Error!");}}}
 
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("ADDING");
-
-            //uint i = 0;
-
-            Part selected = (Part)ListViewResult.SelectedItem;
-            Console.WriteLine("Selected " + selected.Part_name);
-            QuantityDialogBox inputDialog = new QuantityDialogBox();
-            if (inputDialog.ShowDialog() == true)
+            if (Login.getRole() == 3)
             {
-                i = uint.Parse(inputDialog.Answer); //chisloto koeto shte dobavim
-            }
-            Console.WriteLine("za dobavqne i: " + i);
-
-            oldQuant = selected.Quantity;
-            //uint newQuant = 0;
-            if (i >= 0)
-            {
-                newQuant = oldQuant + i;
-                selected.Quantity = newQuant;
+                MessageBox.Show("Unauthorized!", "Error!");
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Въведи положително число", "Грешка");
+                Console.WriteLine("ADDING");
+
+                //uint i = 0;
+
+                Part selected = (Part)ListViewResult.SelectedItem;
+
+                try
+                {
+                    if (selected.GetType() == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+                    Console.WriteLine("Selected " + selected.Part_name);
+                    QuantityDialogBox inputDialog = new QuantityDialogBox();
+                    if (inputDialog.ShowDialog() == true)
+                    {
+                        i = uint.Parse(inputDialog.Answer); //chisloto koeto shte dobavim
+                    }
+                    Console.WriteLine("za dobavqne i: " + i);
+
+                    oldQuant = selected.Quantity;
+                    //uint newQuant = 0;
+                    if (i >= 0)
+                    {
+                        newQuant = oldQuant + i;
+                        selected.Quantity = newQuant;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Въведи положително число", "Грешка");
+                    }
+                    String query = Part.AddPartQuantity(selected.Id, newQuant);
+
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
+
+                    Database.DbConn.Open();
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        Console.WriteLine("REFRESHING ADD");
+                        ListViewResult.Items.Refresh();
+                        Console.WriteLine("REFRESHED ADD");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Грешка добавяне на количество", "Грешка");
+                    }
+
+                    Database.DbConn.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("No item selected!", "Error!");
+                }
             }
-            String query = Part.AddPartQuantity(selected.Id, newQuant);
-
-            MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
-
-            Database.DbConn.Open();
-
-            try
-            {
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("REFRESHING ADD");
-                ListViewResult.Items.Refresh();
-                Console.WriteLine("REFRESHED ADD");
-            }
-            catch
-            {
-                MessageBox.Show("Грешка добавяне на количество", "Грешка");
-            }
-
-            Database.DbConn.Close();
         }
 
         private void BtnCopy_Click(object sender, RoutedEventArgs e)
@@ -150,24 +162,42 @@ namespace Sklad
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            Part selected = (Part)ListViewResult.SelectedItem;
-            String query = Part.DeletePart(selected.Id);
-            MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Сигурни ли сте, че искате да изтриете '" + selected.Part_name + "'?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
-            if(messageBoxResult == MessageBoxResult.Yes)
+            if (Login.getRole() != 1)
             {
-                Database.DbConn.Open();
-                //try
-                {
-                    cmd.ExecuteNonQuery();
-                    Console.WriteLine("deleted");
-                }
-                //catch
-                {
-                   // MessageBox.Show("Error deleting", "Error");
-                }
-                Database.DbConn.Close();
+                MessageBox.Show("Unauthorized!", "Error!");
                 this.Close();
+            }
+            else {
+                Part selected = (Part)ListViewResult.SelectedItem;
+                try
+                {
+                    if (selected.GetType() == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+                    String query = Part.DeletePart(selected.Id);
+                    MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
+                    MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Сигурни ли сте, че искате да изтриете '" + selected.Part_name + "'?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        Database.DbConn.Open();
+                        //try
+                        {
+                            cmd.ExecuteNonQuery();
+                            Console.WriteLine("deleted");
+                        }
+                        //catch
+                        {
+                            // MessageBox.Show("Error deleting", "Error");
+                        }
+                        Database.DbConn.Close();
+                        this.Close();
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("No item selected!", "Error!");
+                }
             }
         }
     }

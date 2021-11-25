@@ -149,7 +149,7 @@ namespace Sklad
 
         public static List<Part> PartSearchByName(String nameIn)
         {
-            String query = string.Format("SELECT * FROM parts WHERE part_name='{0}'", nameIn);
+            String query = string.Format("SELECT * FROM parts WHERE part_name LIKE '%{0}%'", nameIn);
             List<Part> parts = new List<Part>();
 
             MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);
@@ -177,7 +177,7 @@ namespace Sklad
 
         public static List<Part> PartSearchByDesc(String DescIn)
         {
-            String query = string.Format("SELECT * FROM parts WHERE part_desc='{0}'", DescIn);
+            String query = string.Format("SELECT * FROM parts WHERE part_desc LIKE '%{0}%'", DescIn);
             List<Part> parts = new List<Part>();
 
             MySqlCommand cmd = new MySqlCommand(query, Database.DbConn);

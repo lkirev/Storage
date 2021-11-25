@@ -18,6 +18,10 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Text.RegularExpressions;
 
+//Любен Кирев, стажант лято 2021 към софтуеристи, симулатор. email: lkirev@gmail.com, тел. 0886630617
+
+
+
 namespace Sklad
 {
     /// <summary>
@@ -26,12 +30,11 @@ namespace Sklad
     public partial class MainWindow : Window
     {
 
-
         public MainWindow()
         {
             InitializeComponent();
+            lblRole.Content = Login.getRoleName(Login.getRole());
             Database.InitializeDB();
-            
         }
 
         
@@ -49,43 +52,9 @@ namespace Sklad
 
             ResultForm.ListViewResult.Items.Clear();
 
-            //foreach (Part p in parts)
-            //{
-            /*String[] StringArr = new String[]
-            {
-                p.Id.ToString(),
-                p.Part_name,
-                p.Quantity.ToString(),
-                p.Part_desc,
-                p.Part_loc
-            };*/
-            //ListViewItem Item = new ListViewItem(new String[] { p.Id.ToString(), p.Part_name.ToString(), p.Quantity.ToString(), p.Part_desc.ToString(), p.Part_loc.ToString() });
-
-            //ListViewItem Item = new ListViewItem();
-
-            //Item.Content = StringArr;
-
-            //Item.Tag = p;
-
             ResultForm.ListViewResult.ItemsSource = parts;
 
-
-
-
-
-                //resultForm.ListViewResult.Items.Add(Item);
-
-                //Console.WriteLine(p.Id);
-                //Console.WriteLine("hello");
-
-
-
-                //resultForm.ListViewResult.co
-
-                //resultForm.ListViewResult.Items.Add(p.id.ToString(), p.part_name, p.quantity.ToString(), p.part_desc, p.part_loc.ToString());
-            //}
-
-            ResultForm.ShowDialog();
+            ResultForm.Show();
 
         }
 
@@ -120,12 +89,6 @@ namespace Sklad
                 ResultForm.ShowDialog();
             }
             catch (MyInvalidInputException) { }
-
-            //Console.WriteLine(input);
-            // String query = "SELECT * FROM parts where id = " + input + ";";
-            // MySqlCommand cmd = new MySqlCommand(query, dbConn);
-            
-
         }
 
         private void BtnDesc_Click(object sender, RoutedEventArgs e)
@@ -164,14 +127,9 @@ namespace Sklad
 
         private void BtnLocation_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            {
-                //if(TxtByLocation.Text)
-            }
             String input = TxtByLocation.Text;
             String room = "";
             String sub_loc = "";
-            //string[] strings = Regex.Split(input, @"\W|_");
             string[] strings = Regex.Split(input, @"\s");
 
             try
@@ -201,28 +159,6 @@ namespace Sklad
 
                 id = Location.LocationID(room);
             }
-
-            /*int id = 0;
-            if (input.Contains("T2"))
-            {
-                for(int i = 0; i < input.Count(); i++)
-                {
-                    if(input.ElementAt(i).Equals(" "))
-                    {
-                        for(int j = 0; j <= i; j++)
-                        {
-
-                        }
-                    }
-                }
-                id = Location.LocationIDT2(input);
-            }
-            else
-            {
-                id = Location.LocationID(input);
-            }
-            */
-            
 
             List<Part> parts = Part.PartSearchByLoc(id);
 
@@ -284,34 +220,12 @@ namespace Sklad
 
         }
 
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            this.Close();
+            login.ShowDialog();
 
-        /* public static void InitializeDB()
-         {
-
-             MySql.Data.MySqlClient.MySqlConnection conn;
-             MySql.Data.MySqlClient.MySqlCommand cmd;
-
-             string ConnString;
-
-             ConnString = "server=127.0.0.1;uid=root;" + "pwd=admin;database=sklad1m";
-
-             try
-             {
-                 conn = new MySql.Data.MySqlClient.MySqlConnection();
-                 cmd = new MySql.Data.MySqlClient.MySqlCommand();
-                 conn.ConnectionString = ConnString;
-                 conn.Open();
-                 cmd.Connection = conn;
-             }
-             catch (MySql.Data.MySqlClient.MySqlException e)
-             {
-                 MessageBox.Show("Error connection to DB" + e.Message);
-             }
-
-        MySql.Data.MySqlClient.MySqlConnection dbConn = new MySql.Data.MySqlClient.MySqlConnection("Persist Security Info=False;server=localhost;database=sklad1m;uid=root;password=admin");
-
-        }*/
+        }
     }
-
-
 }
